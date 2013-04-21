@@ -2,6 +2,19 @@
 #define LEXCER 1
 #include "token.h"
 
+int searchAdd(std::string key) {
+    int i = 0;
+    for (std::vector<std::string>::iterator ite = hList.begin();
+         ite < hList.end();ite++) {
+        if ( *ite == key) {
+            return i;
+        }
+        i++;
+    }
+    hList.push_back(key);
+    return i;
+}
+
 /*!re2c
    re2c:define:YYCTYPE = "unsigned char";
    re2c:define:YYCURSOR = yyin;
@@ -85,9 +98,7 @@ id     {
     ret.type = IDENTFY;
     std::stringstream ss;
     while(yyold < yyin)ss << *yyold++;
-    std::cout << "id : " << ss.str() << std::endl;
-    ret.svalue = (char*)(ss.str().c_str());
-    std::cout << "id : " << ret.svalue << std::endl;
+    ret.value = searchAdd(ss.str());
     return ret;
 }
 space  {

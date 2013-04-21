@@ -35,17 +35,11 @@ program ::= expr(A).  {
 }
 
 expr(A) ::= IDENTFY(B) EQUAL expr(C). {
-    CToken ct;
-    ct.type = C.type;
-    ct.value = C.value;
-    ct.dvalue = C.dvalue;
-    ct.svalue = C.svalue;
-    hInst[std::string(B.svalue)] = ct;
-    std::cout << B.type << " :  " << B.svalue << std::endl;
+    hInst[hList[B.value]] = C;
+    std::cout << B.value << " :  " << hList[B.value] << std::endl;
     A.type = C.type;
     A.value = C.value;
     A.dvalue = C.dvalue;
-    A.svalue = C.svalue;
 }
 
 expr(A) ::= expr(B) PLUS expr(C). {
@@ -120,11 +114,11 @@ expr(A) ::= FLOAT(B). {
 }
 
 expr(A) ::= IDENTFY(B). {
-    if (hInst.find(std::string(B.svalue)) == hInst.end()) {
+    std::cout << hList[B.value] << " : used" << std::endl;
+    if (hInst.find(hList[B.value]) == hInst.end()) {
         A.type = INTEGER;
         A.value = 0;
-        std::cout << B.svalue << " : not assigned" << std::endl;
     } else {
-        A = hInst[std::string(B.svalue)];
+        A = hInst[hList[B.value]];
     }
 }

@@ -2,24 +2,26 @@
 #define TOKEN_HEADER
 #include "parser.h"
 #include <map>
+#include <vector>
 #include <iostream>
 
 typedef struct Token {
     int type;
     long long value;
     double dvalue;
-    char* svalue;
 } CToken;
 
 #ifdef LEXCER
 const char* yyin;
 const char* yyold;
 const char* yymk;
+std::vector<std::string> hList;
 std::map<std::string, CToken> hInst;
 #else
 extern const char* yyin;
 extern const char* yyold;
 extern const char* yymk;
+extern std::vector<std::string> hList;
 extern std::map<std::string, CToken> hInst;
 #endif
 
