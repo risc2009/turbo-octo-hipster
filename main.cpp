@@ -9,7 +9,6 @@ int main(int argc,char* argv[]) {
     std::string strLine;
     if (argc > 1) {
         strLine = argv[1];
-        std::cout << "[" << strLine << "]" << std::endl;
         runCom(strLine);
     } else {
         while (true) {
@@ -27,6 +26,7 @@ bool runCom(std::string command) {
     yyin = command.c_str();
     CToken ct;
     void* pParser = ParseAlloc (malloc);
+    Parse (pParser, QSTART, ct);
     while (true) {
         ct = yylex();
         if (ct.type == EXIT) {
@@ -35,11 +35,12 @@ bool runCom(std::string command) {
         else if (ct.type == ERROR) {
             std::cout << "lexcer error!" << std::endl;
             break;
+        } else if (ct.type == END) {
+            Parse (pParser, QEND, ct);
+            Parse (pParser, ct.type, ct);
+            break;
         } else {
             Parse (pParser, ct.type, ct);
-            if (ct.type == END) {
-                break;
-            }
         }
     }
     ParseFree(pParser, free );

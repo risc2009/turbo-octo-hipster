@@ -9,6 +9,8 @@
 %token_type {CToken}
 %default_type{CToken}
 
+%type QSTART   { CToken }
+%type QEND     { CToken }
 %type expr    { CToken }
 %type INTEGER { CToken }
 %type FLOAT   { CToken }
@@ -23,7 +25,10 @@
     std::cout << "Parser error!" << std::endl;
 }
 
-program ::= expr(A).  {
+program ::= QSTART QEND. {
+}
+
+program ::= QSTART expr(A) QEND.  {
     switch(A.type){
     case FLOAT:
         std::cout << std::setprecision(14) << A.dvalue << std::endl;
