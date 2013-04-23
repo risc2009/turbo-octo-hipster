@@ -110,3 +110,5 @@ set_tests_properties(shellCompA10.1
 
 do_test (1+2*3 "7")
 do_test (1+6/2 "4")
+
+do_test (1=1 "Parser error!")
