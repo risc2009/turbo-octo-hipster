@@ -34,6 +34,14 @@ CToken yylex()
 start:
     yyold = yyin;
 /*!re2c
+'+='   {
+    ret.type = PLUSEQUAL;
+    return ret;
+}
+'-='   {
+    ret.type = MINUSEQUAL;
+    return ret;
+}
 '+'    {
     ret.type = PLUS;
     return ret;

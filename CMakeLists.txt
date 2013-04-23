@@ -60,6 +60,7 @@ add_executable(shell
 )
 
 include (CTest)
+ENABLE_TESTING()
 
 add_test (shellRuns shell 10)
 

@@ -9,9 +9,11 @@ int main(int argc,char* argv[]) {
     std::string strLine;
     if (argc > 1) {
         strLine = argv[1];
+        std::cout << "[" << strLine << "]" << std::endl;
         runCom(strLine);
     } else {
         while (true) {
+            std::cout << ">";
             std::getline(std::cin, strLine);
             if (runCom(strLine)) {
                 return 0;

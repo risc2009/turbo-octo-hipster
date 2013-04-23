@@ -19,7 +19,9 @@ echo "/* TESTING */"
 echo "/***********/"
 echo ""
 
-ctest ..
+# ctest ..
+
+make Experimental
 
 echo ""
 echo "/***********/"

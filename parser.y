@@ -14,7 +14,7 @@
 %type FLOAT   { CToken }
 %type IDENTFY { CToken }
 
-%left EQUAL.
+%left EQUAL PLUSEQUAL MINUSEQUAL.
 %left PLUS MINUS.
 %left DIVIDE MULTIPLY MODIFY.
 %left PARENT1 PARENT2.
@@ -36,10 +36,45 @@ program ::= expr(A).  {
 
 expr(A) ::= IDENTFY(B) EQUAL expr(C). {
     hInst[hList[B.value]] = C;
-    std::cout << B.value << " :  " << hList[B.value] << std::endl;
     A.type = C.type;
     A.value = C.value;
     A.dvalue = C.dvalue;
+}
+
+expr(A) ::= IDENTFY(B) PLUSEQUAL expr(C). {
+    if (hInst.find(hList[B.value]) == hInst.end()) {
+        A.type = INTEGER;
+        A.value = 0;
+    } else {
+        A = hInst[hList[B.value]];
+    }
+    if ( A.type == FLOAT || C.type == FLOAT) {
+        A.dvalue =  (A.type == FLOAT ? A.dvalue : (double)A.value)
+        + ( C.type == FLOAT ? C.dvalue : (double)C.value);
+        A.type = FLOAT;
+    } else {
+        A.value = A.value + C.value;
+        A.type = INTEGER;
+    }
+    hInst[hList[B.value]] = A;
+}
+
+expr(A) ::= IDENTFY(B) MINUSEQUAL expr(C). {
+    if (hInst.find(hList[B.value]) == hInst.end()) {
+        A.type = INTEGER;
+        A.value = 0;
+    } else {
+        A = hInst[hList[B.value]];
+    }
+    if ( A.type == FLOAT || C.type == FLOAT) {
+        A.dvalue =  (A.type == FLOAT ? A.dvalue : (double)A.value)
+        - ( C.type == FLOAT ? C.dvalue : (double)C.value);
+        A.type = FLOAT;
+    } else {
+        A.value -= C.value;
+        A.type = INTEGER;
+    }
+    hInst[hList[B.value]] = A;
 }
 
 expr(A) ::= expr(B) PLUS expr(C). {
@@ -114,7 +149,6 @@ expr(A) ::= FLOAT(B). {
 }
 
 expr(A) ::= IDENTFY(B). {
-    std::cout << hList[B.value] << " : used" << std::endl;
     if (hInst.find(hList[B.value]) == hInst.end()) {
         A.type = INTEGER;
         A.value = 0;
