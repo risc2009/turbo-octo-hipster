@@ -1,4 +1,4 @@
-#ifdef LINUX
+#ifdef linux
 #include <stdlib.h>
 #endif
 #include <iostream>

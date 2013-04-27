@@ -1,5 +1,5 @@
 %include {
-    #ifdef LINUX
+    #ifdef linux
     #include <assert.h>
     #endif
     #include <math.h>
