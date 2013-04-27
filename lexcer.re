@@ -42,6 +42,18 @@ start:
     ret.type = MINUSEQUAL;
     return ret;
 }
+'/='   {
+    ret.type = DIVIDEEQUAL;
+    return ret;
+}
+'*='   {
+    ret.type = MULTIPLYEQUAL;
+    return ret;
+}
+'%='   {
+    ret.type = MODIFYEQUAL;
+    return ret;
+}
 '+'    {
     ret.type = PLUS;
     return ret;
@@ -60,6 +72,14 @@ start:
 }
 '%'    {
     ret.type = MODIFY;
+    return ret;
+}
+'{'    {
+    ret.type = ANGEL1;
+    return ret;
+}
+'}'    {
+    ret.type = ANGEL2;
     return ret;
 }
 '('    {

@@ -1,3 +1,6 @@
+#ifdef LINUX
+#include <stdlib.h>
+#endif
 #include <iostream>
 #include "token.h"
 

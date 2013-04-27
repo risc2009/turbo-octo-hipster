@@ -1,7 +1,10 @@
 %include {
+    #ifdef LINUX
+    #include <assert.h>
+    #endif
+    #include <math.h>
     #include <iostream>
     #include <iomanip>
-    #include <math.h>
 
     #include "token.h"
 }
@@ -16,10 +19,10 @@
 %type FLOAT   { CToken }
 %type IDENTFY { CToken }
 
-%left EQUAL PLUSEQUAL MINUSEQUAL.
+%left EQUAL PLUSEQUAL MINUSEQUAL DIVIDEEQUAL MULTIPLYEQUAL MODIFYEQUAL.
 %left PLUS MINUS.
 %left DIVIDE MULTIPLY MODIFY.
-%left PARENT1 PARENT2.
+%left PARENT1 PARENT2 ANGEL1 ANGEL2.
 
 %syntax_error {
     std::cout << "Parser error!" << std::endl;
@@ -77,6 +80,60 @@ expr(A) ::= IDENTFY(B) MINUSEQUAL expr(C). {
         A.type = FLOAT;
     } else {
         A.value -= C.value;
+        A.type = INTEGER;
+    }
+    hInst[hList[B.value]] = A;
+}
+
+expr(A) ::= IDENTFY(B) DIVIDEEQUAL expr(C). {
+    if (hInst.find(hList[B.value]) == hInst.end()) {
+        A.type = INTEGER;
+        A.value = 0;
+    } else {
+        A = hInst[hList[B.value]];
+    }
+    if ( A.type == FLOAT || C.type == FLOAT) {
+        A.dvalue =  (A.type == FLOAT ? A.dvalue : (double)A.value)
+        / ( C.type == FLOAT ? C.dvalue : (double)C.value);
+        A.type = FLOAT;
+    } else {
+        A.value = A.value / C.value;
+        A.type = INTEGER;
+    }
+    hInst[hList[B.value]] = A;
+}
+
+expr(A) ::= IDENTFY(B) MULTIPLYEQUAL expr(C). {
+    if (hInst.find(hList[B.value]) == hInst.end()) {
+        A.type = INTEGER;
+        A.value = 0;
+    } else {
+        A = hInst[hList[B.value]];
+    }
+    if ( A.type == FLOAT || C.type == FLOAT) {
+        A.dvalue =  (A.type == FLOAT ? A.dvalue : (double)A.value)
+        / ( C.type == FLOAT ? C.dvalue : (double)C.value);
+        A.type = FLOAT;
+    } else {
+        A.value = A.value / C.value;
+        A.type = INTEGER;
+    }
+    hInst[hList[B.value]] = A;
+}
+
+expr(A) ::= IDENTFY(B) MODIFYEQUAL expr(C). {
+    if (hInst.find(hList[B.value]) == hInst.end()) {
+        A.type = INTEGER;
+        A.value = 0;
+    } else {
+        A = hInst[hList[B.value]];
+    }
+    if ( A.type == FLOAT || C.type == FLOAT) {
+        A.dvalue =  fmod((A.type == FLOAT ? A.dvalue : (double)A.value)
+        ,( C.type == FLOAT ? C.dvalue : (double)C.value));
+        A.type = FLOAT;
+    } else {
+        A.value = A.value % C.value;
         A.type = INTEGER;
     }
     hInst[hList[B.value]] = A;
@@ -141,6 +198,9 @@ expr(A) ::= PARENT1 expr(B) PARENT2. {
     A.type = B.type;
     A.value = B.value;
     A.dvalue = B.dvalue;
+}
+
+expr ::= ANGEL1 expr ANGEL2. {
 }
 
 expr(A) ::= INTEGER(B). {
